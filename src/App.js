@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Toggle from "./components/Toggle";
+import useTitleInput from "./hooks/useTitleInput";
 
 const App = () => {
-  // const [value, setValue] = useState(initialState);
-  const [name, setName] = useState("");
-
-  useEffect(() => {
-    document.title = name;
-  });
+  const [name, setName] = useTitleInput("");
   return (
     <div className="main-wrapper">
       <h1>Level Up Dishes</h1>
