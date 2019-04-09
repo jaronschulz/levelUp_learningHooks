@@ -2,6 +2,7 @@ import React, { useRef, createContext, useEffect, useState } from "react";
 import Toggle from "./components/Toggle";
 import useAbortableFetch from "use-abortable-fetch";
 import useTitleInput from "./hooks/useTitleInput";
+import { useSpring, animated } from "react-spring";
 
 export const UserContext = createContext();
 
@@ -12,7 +13,7 @@ const App = () => {
     "https://my-json-server.typicode.com/leveluptuts/fakeapi/dishes"
   );
 
-  if (!data) return null;
+  const props = useSpring({ opacity: 1, from: { opacity: 0 } });
 
   return (
     <UserContext.Provider
@@ -21,9 +22,12 @@ const App = () => {
       }}
     >
       <div className="main-wrapper" ref={ref}>
-        <h1 onClick={() => ref.current.classList.add("new-Fake-class")}>
+        <animated.h1
+          style={props}
+          onClick={() => ref.current.classList.add("new-Fake-class")}
+        >
           Level Up Dishes
-        </h1>
+        </animated.h1>
         <Toggle>Toggle</Toggle>
 
         <form
@@ -39,17 +43,18 @@ const App = () => {
           <button>Submit</button>
         </form>
 
-        {data.map(dish => (
-          <article className="dish-card dish-card--withImage">
-            <h3>{dish.name}</h3>
-            <p>{dish.desc}</p>
-            <div className="ingredients">
-              {dish.ingredients.map(ingredient => (
-                <span>{ingredient}</span>
-              ))}
-            </div>
-          </article>
-        ))}
+        {data &&
+          data.map(dish => (
+            <article className="dish-card dish-card--withImage">
+              <h3>{dish.name}</h3>
+              <p>{dish.desc}</p>
+              <div className="ingredients">
+                {dish.ingredients.map(ingredient => (
+                  <span>{ingredient}</span>
+                ))}
+              </div>
+            </article>
+          ))}
       </div>
     </UserContext.Provider>
   );
